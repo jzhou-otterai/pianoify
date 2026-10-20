@@ -70,9 +70,8 @@ export interface Model {
 }
 
 /**
- * The model menu, in the order it is offered — the box first, because it is
- * what the picker opens on: it costs nothing per clip, so it is the one to
- * reach for unless the sheet music is the point.
+ * The model menu, in the order it is offered. Mirelo performance is the
+ * default while the self-hosted MuScriptor service is unavailable.
  *
  * Two of the three are the same Mirelo model asked for different note times:
  * it publishes one audio-to-MIDI model (v1.0) and one meaningful choice about
@@ -82,15 +81,6 @@ export interface Model {
  * isn't. The third is the box.
  */
 export const MODELS: Model[] = [
-  {
-    id: "muscriptor",
-    backend: "muscriptor",
-    service: "the gpu box",
-    name: "MuScriptor · GPU box",
-    tag: "self-hosted",
-    note: "Runs on the rented GPU rather than a hosted API: no credits, and the notes appear on the roll as the box decodes them. The sheet music is engraved a few seconds behind them.",
-    billed: false,
-  },
   {
     id: "mirelo-performance",
     backend: "mirelo",
@@ -110,6 +100,15 @@ export const MODELS: Model[] = [
     note: "Snaps onsets to the detected beats — honoured only when that grid is steady enough to move notes onto.",
     timing: "quantized",
     billed: true,
+  },
+  {
+    id: "muscriptor",
+    backend: "muscriptor",
+    service: "the gpu box",
+    name: "MuScriptor · GPU box",
+    tag: "self-hosted",
+    note: "Runs on the rented GPU rather than a hosted API: no credits, and the notes appear on the roll as the box decodes them. The sheet music is engraved a few seconds behind them.",
+    billed: false,
   },
 ];
 
