@@ -54,7 +54,7 @@ export const YTDLP_BASE = base(import.meta.env.VITE_YTDLP_API_BASE, "");
 export const ytdlpApi = (path: string) => YTDLP_BASE + path;
 
 /**
- * The GPU box that runs MuScriptor, the other transcriber in the picker.
+ * The CPU server that runs MuScriptor Small, the other transcriber in the picker.
  *
  * The default is a path on this origin, not the box's own hostname: the box
  * answers a browser only from origins in its `MUSCRIPTOR_ALLOWED_ORIGINS`, and
@@ -63,7 +63,7 @@ export const ytdlpApi = (path: string) => YTDLP_BASE + path;
  * makes every call same-origin to the browser and server-to-server to the box,
  * where CORS does not apply.
  *
- * Point this at `https://muscriptor-api.jerryzhou.ca` to talk to the box
+ * Point this at `https://jerryzhou.ca/muscriptor` to talk to the box
  * directly — which works only from an origin it lists. Blank means the default
  * rather than same-origin-with-no-prefix, which the chord base above uses it
  * for: there the prefix *is* the path the proxy matches, so an empty base

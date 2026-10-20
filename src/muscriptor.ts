@@ -98,7 +98,7 @@ async function run(
   });
   if (!resp.ok || !resp.body) {
     throw new TranscribeError(
-      (await errorDetail(resp)) ?? `the gpu box answered ${resp.status}`,
+      (await errorDetail(resp)) ?? `the transcription server answered ${resp.status}`,
       resp.status,
     );
   }

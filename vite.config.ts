@@ -72,7 +72,7 @@ export default defineConfig(({ mode }) => {
 
   const chords = env.DEV_CHORD_BACKEND ?? "https://jerrdeh-muscriptor-chords.hf.space";
   const ytdlp = env.DEV_YTDLP_BACKEND ?? "https://jerryzhou.ca";
-  const gpu = env.DEV_MUSCRIPTOR_BACKEND ?? "https://muscriptor-api.jerryzhou.ca";
+  const gpu = env.DEV_MUSCRIPTOR_BACKEND ?? "https://jerryzhou.ca/muscriptor";
 
   return {
     plugins: [react(), devApi()],

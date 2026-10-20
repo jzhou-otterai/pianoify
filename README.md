@@ -106,7 +106,7 @@ Three entries, two backends, in `src/models.ts`, in the order they are offered:
 |---|---|
 | **Mirelo v1.0 · performance** | the hosted API, times as played — the default |
 | **Mirelo v1.0 · quantized** | the same, onsets snapped to the detected beats |
-| **MuScriptor · GPU box** | the rented GPU, reached at `/gpu/*` |
+| **MuScriptor Small · CPU** | the shared CPU server, reached at `/gpu/*`; clips up to 10 seconds |
 
 The picker is in two places (`ModelPicker.tsx`, one component and one piece of
 state above it): the header, and the head of the upload modal. The modal's copy
@@ -114,8 +114,9 @@ is the one that matters — the modal cannot be dismissed, so until something ha
 been transcribed the header is behind the scrim, and the choice of what does
 the transcribing has to be reachable before the file is, not after.
 
-Mirelo performance leads the list and is what the picker opens on while the
-self-hosted MuScriptor service is unavailable.
+Mirelo performance leads the list and is what the picker opens on. MuScriptor
+Small is also available on the shared CPU server through
+`https://jerryzhou.ca/muscriptor/`.
 
 Mirelo bills credits per second of input, which is why the modal quotes a price
 before the button, and engraves as it transcribes: its MusicXML comes back with

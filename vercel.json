@@ -34,7 +34,7 @@
     },
     {
       "source": "/gpu/:path*",
-      "destination": "https://muscriptor-api.jerryzhou.ca/:path*"
+      "destination": "https://jerryzhou.ca/muscriptor/:path*"
     }
   ]
 }

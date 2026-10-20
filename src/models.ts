@@ -9,8 +9,8 @@
  *   transcribes: the MusicXML behind the sheet-music tab comes back with the
  *   notes.
  *
- *   **MuScriptor** is the rented GPU box. It costs nothing per clip because
- *   the instance is already paid for by the hour, it streams notes as it
+ *   **MuScriptor Small** runs on the shared CPU server. It costs no API
+ *   credits per clip, streams notes as it
  *   decodes them, and it engraves on a second request — MuseScore, on the
  *   box's CPU, a few seconds after the roll is already playing.
  *
@@ -57,7 +57,7 @@ export interface Model {
   id: ModelId;
   /** Which client runs this one. */
   backend: "mirelo" | "muscriptor";
-  /** Named in the stage line: "queued at mirelo", "queued on the gpu box". */
+  /** Named in the stage line: "queued at mirelo", "queued on the cpu server". */
   service: string;
   name: string;
   tag: string;
@@ -71,7 +71,7 @@ export interface Model {
 
 /**
  * The model menu, in the order it is offered. Mirelo performance is the
- * default while the self-hosted MuScriptor service is unavailable.
+ * default. MuScriptor Small is available on the shared CPU server.
  *
  * Two of the three are the same Mirelo model asked for different note times:
  * it publishes one audio-to-MIDI model (v1.0) and one meaningful choice about
@@ -104,10 +104,10 @@ export const MODELS: Model[] = [
   {
     id: "muscriptor",
     backend: "muscriptor",
-    service: "the gpu box",
-    name: "MuScriptor · GPU box",
+    service: "the cpu server",
+    name: "MuScriptor Small · CPU",
     tag: "self-hosted",
-    note: "Runs on the rented GPU rather than a hosted API: no credits, and the notes appear on the roll as the box decodes them. The sheet music is engraved a few seconds behind them.",
+    note: "Runs the Small model on our CPU server: no API credits, clips up to 10 seconds, and notes stream as they are decoded. Sheet music follows after transcription.",
     billed: false,
   },
 ];
