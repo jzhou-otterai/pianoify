@@ -41,13 +41,12 @@ export const MAX_CLIP_SECONDS = 10;
 export const CLIP_SECONDS = MAX_CLIP_SECONDS;
 
 /**
- * The YouTube→audio service, which is self-hosted (yt-dlp behind FastAPI).
+ * The YouTube→audio service: the Local YouTube Downloader behind
+ * downloads.jerryzhou.ca, which wants a bearer token the browser must not see.
  *
- * Same shape as the chord service above: an explicitly empty value makes the
- * URLs relative, which the dev proxy forwards — and in production a rewrite in
- * `vercel.json` does the same thing at the edge. Going through this origin
- * rather than calling the service directly is what keeps the app out of the
- * service's CORS allowlist entirely.
+ * Empty by default, so `/ytdlp/download` is relative: `vercel.json` rewrites
+ * it to the `api/ytdlp.ts` function in production and the dev server mounts
+ * the same function locally. The function holds `YTDLP_TOKEN` and forwards.
  */
 export const YTDLP_BASE = base(import.meta.env.VITE_YTDLP_API_BASE, "");
 

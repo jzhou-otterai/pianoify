@@ -15,12 +15,11 @@ import react from "@vitejs/plugin-react";
  *   run in both places. `ssrLoadModule` compiles the TypeScript and picks up
  *   edits without a restart.
  *
- *   `/analyze`, `/ytdlp` and `/gpu` — the chord Space, the self-hosted yt-dlp
- *   service and the MuScriptor GPU box are all CORS-gated on exact origins,
- *   and no localhost is in any of the allowlists. Proxying makes the request
- *   same-origin to the browser and server-to-server to the backend, where CORS
- *   does not apply. In production `vercel.json` rewrites `/ytdlp` and `/gpu`
- *   the same way, so the app never appears in those allowlists at all — which
+ *   `/analyze` and `/gpu` — the chord Space and the MuScriptor GPU box are
+ *   CORS-gated on exact origins, and no localhost is in either allowlist.
+ *   Proxying makes the request same-origin to the browser and server-to-server
+ *   to the backend, where CORS does not apply. In production `vercel.json`
+ *   rewrites `/gpu` the same way, so the app never appears in those allowlists at all — which
  *   matters most for the box, since a Vercel preview URL is different on every
  *   deployment and could never be listed ahead of time.
  */
@@ -30,6 +29,8 @@ function devApi(): Plugin {
     "/api/job": "/api/job.ts",
     "/api/preflight": "/api/preflight.ts",
     "/api/fetch": "/api/fetch.ts",
+    // Rewritten to `/api/ytdlp` by `vercel.json` in production.
+    "/ytdlp/download": "/api/ytdlp.ts",
   };
 
   return {
@@ -68,10 +69,11 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   // The key normally comes from the shell. Reading it out of a `.env.local`
   // too means `npm run dev` works in a terminal that never sourced a profile.
-  if (!process.env.MIRELO_KEY && env.MIRELO_KEY) process.env.MIRELO_KEY = env.MIRELO_KEY;
+  for (const name of ["MIRELO_KEY", "YTDLP_TOKEN"]) {
+    if (!process.env[name] && env[name]) process.env[name] = env[name];
+  }
 
   const chords = env.DEV_CHORD_BACKEND ?? "https://jerrdeh-muscriptor-chords.hf.space";
-  const ytdlp = env.DEV_YTDLP_BACKEND ?? "https://jerryzhou.ca";
   const gpu = env.DEV_MUSCRIPTOR_BACKEND ?? "https://jerryzhou.ca/muscriptor";
 
   return {
@@ -80,10 +82,6 @@ export default defineConfig(({ mode }) => {
       proxy: {
         "/analyze": { target: chords, changeOrigin: true, secure: true },
         "/health": { target: chords, changeOrigin: true, secure: true },
-        // The yt-dlp service. Proxied for the same reason as the chord Space —
-        // its CORS allowlist is the slowedrvb origins — and with no timeout,
-        // because a download runs at about half the video's own length.
-        "/ytdlp": { target: ytdlp, changeOrigin: true, secure: true, timeout: 0, proxyTimeout: 0 },
         // The GPU box. `/gpu` is this app's prefix, not the box's, so it comes
         // off on the way through. No timeout: `/transcribe` holds the response
         // open for as long as the box takes, and the notes arrive down it.
