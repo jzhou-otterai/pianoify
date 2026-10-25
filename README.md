@@ -106,7 +106,7 @@ Three entries, two backends, in `src/models.ts`, in the order they are offered:
 |---|---|
 | **Mirelo v1.0 · performance** | the hosted API, times as played — the default |
 | **Mirelo v1.0 · quantized** | the same, onsets snapped to the detected beats |
-| **MuScriptor Small · CPU** | the shared CPU server, reached at `/gpu/*`; clips up to 10 seconds |
+| **MuScriptor · Kyutai** | muscriptor.kyutai.org, piano only, reached at `/gpu/*` |
 
 The picker is in two places (`ModelPicker.tsx`, one component and one piece of
 state above it): the header, and the head of the upload modal. The modal's copy
@@ -115,8 +115,8 @@ been transcribed the header is behind the scrim, and the choice of what does
 the transcribing has to be reachable before the file is, not after.
 
 Mirelo performance leads the list and is what the picker opens on. MuScriptor
-Small is also available on the shared CPU server through
-`https://jerryzhou.ca/muscriptor/`.
+is Kyutai's public instance at `https://muscriptor.kyutai.org/`, asked for
+`acoustic_piano` only.
 
 Mirelo bills credits per second of input, which is why the modal quotes a price
 before the button, and engraves as it transcribes: its MusicXML comes back with
@@ -157,12 +157,10 @@ An engraving that fails costs the sheet-music tab and nothing else. The notes
 are already on the roll and playing, the MIDI export still works, and the tab
 says the box could not engrave that one.
 
-The box answers a browser only from the origins in its
-`MUSCRIPTOR_ALLOWED_ORIGINS`, so the app never calls it cross-origin: `/gpu/*`
-is a rewrite in `vercel.json` and a proxy in `vite.config.ts`, which makes
-every call same-origin to the browser and server-to-server to the box. Point
-`VITE_MUSCRIPTOR_API_BASE` at the box's hostname to skip the hop, from an
-origin it lists.
+muscriptor.kyutai.org sends no CORS headers, so the app never calls it
+cross-origin: `/gpu/*` is a rewrite in `vercel.json` and a proxy in
+`vite.config.ts`, which makes every call same-origin to the browser and
+server-to-server to Kyutai.
 
 ### The piano
 
@@ -232,7 +230,7 @@ than a drawing's approximation of it. `public/robots.txt` and
 | `src/audio.ts` | decode, waveform, window selection, WAV encoding |
 | `src/models.ts` | the model picker's entries, and what both transcribers speak |
 | `src/mirelo.ts` | upload, submit, poll, and what Mirelo's shapes mean |
-| `src/muscriptor.ts` | the GPU box: one POST, the SSE stream it answers with, and the engraving that follows |
+| `src/muscriptor.ts` | Kyutai's public MuScriptor: one POST, the SSE stream it answers with, and the engraving that follows |
 | `src/zip.ts` | one member out of a stored zip, so the engraving needs no zip library |
 | `src/chords.ts` | the chord service |
 | `src/links.ts` | pasted links: YouTube, and everything else |
