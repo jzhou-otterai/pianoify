@@ -5,22 +5,21 @@ import type { BeatGrid, Engraving, Note, Transcription } from "./types";
 import { fileFromZip } from "./zip";
 
 /**
- * Transcription on the rented GPU box.
+ * Transcription on Kyutai's public MuScriptor instance (muscriptor.kyutai.org).
  *
  * One request, held open: `/transcribe` is a POST that answers with an SSE
  * stream, so the roll draws notes while the box is still decoding them. That
  * is the whole reason it is a stream and not a plain POST — the alternative
  * shows nothing until the last note is in.
  *
- * It is not called cross-origin. The box's CORS allowlist is a list of exact
- * origins and a Vercel preview URL is never on it, so the request goes to this
- * site's own `/gpu/*`, which `vercel.json` rewrites to the box at the edge and
+ * It is not called cross-origin. The public instance sends no CORS headers at
+ * all, so the request goes to this site's own `/gpu/*`, which `vercel.json`
+ * rewrites to the instance at the edge and
  * `vite.config.ts` proxies in dev — the same trick the app already plays on
  * the yt-dlp service. Server-to-server, where CORS does not apply.
  *
- * Chords are not asked for here even though the box can recognize them: the
- * app has one chord source (the standalone service in `src/chords.ts`) and
- * having two would mean two chord tracks to reason about.
+ * Chords come from the standalone service in `src/chords.ts`; the public
+ * instance does not offer them.
  *
  * Notation is a second request. `/sheets` runs MuseScore over a MIDI file and
  * comes back with a zip of everything it engraved, so this backend fills the
@@ -85,7 +84,6 @@ async function run(
   form.append("file", file, file.name);
   form.append("instruments", INSTRUMENT);
   form.append("detect_tempo", "best-effort");
-  form.append("chords", "false");
 
   handlers.onStage?.("uploading");
   handlers.onProgress?.(null);

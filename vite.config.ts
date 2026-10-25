@@ -74,7 +74,7 @@ export default defineConfig(({ mode }) => {
   }
 
   const chords = env.DEV_CHORD_BACKEND ?? "https://jerrdeh-muscriptor-chords.hf.space";
-  const gpu = env.DEV_MUSCRIPTOR_BACKEND ?? "https://jerryzhou.ca/muscriptor";
+  const gpu = env.DEV_MUSCRIPTOR_BACKEND ?? "https://muscriptor.kyutai.org";
 
   return {
     plugins: [react(), devApi()],
@@ -82,9 +82,9 @@ export default defineConfig(({ mode }) => {
       proxy: {
         "/analyze": { target: chords, changeOrigin: true, secure: true },
         "/health": { target: chords, changeOrigin: true, secure: true },
-        // The GPU box. `/gpu` is this app's prefix, not the box's, so it comes
+        // Kyutai's public MuScriptor. `/gpu` is this app's prefix, not theirs, so it comes
         // off on the way through. No timeout: `/transcribe` holds the response
-        // open for as long as the box takes, and the notes arrive down it.
+        // open for as long as decoding takes, and the notes arrive down it.
         "/gpu": {
           target: gpu,
           changeOrigin: true,

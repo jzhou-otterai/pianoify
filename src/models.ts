@@ -9,10 +9,10 @@
  *   transcribes: the MusicXML behind the sheet-music tab comes back with the
  *   notes.
  *
- *   **MuScriptor Small** runs on the shared CPU server. It costs no API
- *   credits per clip, streams notes as it
- *   decodes them, and it engraves on a second request — MuseScore, on the
- *   box's CPU, a few seconds after the roll is already playing.
+ *   **MuScriptor** is Kyutai's public instance at muscriptor.kyutai.org,
+ *   asked for piano only. It costs no API credits per clip, streams notes as
+ *   it decodes them, and it engraves on a second request — MuseScore, a few
+ *   seconds after the roll is already playing.
  *
  * The types below are shared rather than per-backend so that `App.tsx` can
  * hold one set of handlers and hand it to whichever of the two the picker
@@ -57,7 +57,7 @@ export interface Model {
   id: ModelId;
   /** Which client runs this one. */
   backend: "mirelo" | "muscriptor";
-  /** Named in the stage line: "queued at mirelo", "queued on the cpu server". */
+  /** Named in the stage line: "queued at mirelo", "queued on muscriptor". */
   service: string;
   name: string;
   tag: string;
@@ -71,14 +71,14 @@ export interface Model {
 
 /**
  * The model menu, in the order it is offered. Mirelo performance is the
- * default. MuScriptor Small is available on the shared CPU server.
+ * default. MuScriptor is Kyutai's public instance.
  *
  * Two of the three are the same Mirelo model asked for different note times:
  * it publishes one audio-to-MIDI model (v1.0) and one meaningful choice about
  * how it reports its results. `quantized` is a request rather than an
  * instruction — the server honours it only when the beat grid it detected is
  * steady enough to move notes onto, and says so in `timing.applied` when it
- * isn't. The third is the box.
+ * isn't. The third is MuScriptor.
  */
 export const MODELS: Model[] = [
   {
@@ -104,10 +104,10 @@ export const MODELS: Model[] = [
   {
     id: "muscriptor",
     backend: "muscriptor",
-    service: "the cpu server",
-    name: "MuScriptor Small · CPU",
-    tag: "self-hosted",
-    note: "Runs the Small model on our CPU server: no API credits, clips up to 10 seconds, and notes stream as they are decoded. Sheet music follows after transcription.",
+    service: "muscriptor",
+    name: "MuScriptor · Kyutai",
+    tag: "free",
+    note: "Kyutai's public MuScriptor, transcribing for piano only: no API credits, and notes stream as they are decoded. Sheet music follows after transcription.",
     billed: false,
   },
 ];
