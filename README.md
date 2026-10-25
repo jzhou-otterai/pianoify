@@ -2,8 +2,8 @@
 
 ```
 audio file, or a youtube link
-   ↓  /ytdlp/download   (youtube only) the self-hosted yt-dlp service, reached
-   ↓                    through this origin so no CORS allowlist is involved
+   ↓  /ytdlp/download   (youtube only) api/ytdlp.ts, which forwards to the
+   ↓                    self-hosted downloader with a server-side token
    ↓  audio.ts          decode in the browser; peaks for the waveform; open the
    ↓                    trim handles on the first ten non-silent seconds
    ↓  (you drag)        the crop is cut to a mono 16-bit WAV
@@ -70,12 +70,13 @@ the piece back to the start under you.
 
 ### YouTube
 
-A YouTube link goes to a self-hosted yt-dlp service (FastAPI, `/ytdlp/` on
-`jerryzhou.ca`), which copies YouTube's native AAC stream into an `.m4a`
-without re-encoding. It is reached at a path on *this* origin — proxied by the
-dev server, rewritten by `vercel.json` in production — so the browser makes no
-cross-origin request and this app never has to appear in that service's CORS
-allowlist. The service validates the YouTube host and the video id itself.
+A YouTube link goes to the self-hosted Local YouTube Downloader, exposed by a
+Cloudflare tunnel at `downloads.jerryzhou.ca`, which hands back YouTube's
+native AAC stream as an `.m4a`. It answers only requests carrying a bearer
+token, so the browser calls `/ytdlp/download` on *this* origin and
+`api/ytdlp.ts` forwards it with `YTDLP_TOKEN` (rewritten there by `vercel.json`
+in production, mounted by the dev server locally). The downloader validates
+the YouTube host and the video id itself, and runs at most two jobs at once.
 
 It is the slow part of the app: a download runs at roughly half the video's own
 length and reports no progress until it is done, which is why the modal counts

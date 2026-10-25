@@ -29,8 +29,8 @@
       "destination": "/about.html"
     },
     {
-      "source": "/ytdlp/:path*",
-      "destination": "https://jerryzhou.ca/ytdlp/:path*"
+      "source": "/ytdlp/download",
+      "destination": "/api/ytdlp"
     },
     {
       "source": "/gpu/:path*",
