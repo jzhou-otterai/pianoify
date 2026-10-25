@@ -411,7 +411,7 @@ export default function App() {
    *  backend the tab does not open until there is a page behind it. */
   const sheetNotice =
     engraving === "running"
-      ? "engraving on the gpu box — a few seconds"
+      ? "engraving on muscriptor — a few seconds"
       : engraving === "failed"
         ? "the box could not engrave this one — the roll and the MIDI are unaffected"
         : null;

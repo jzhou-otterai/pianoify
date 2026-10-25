@@ -54,17 +54,16 @@ export const YTDLP_BASE = base(import.meta.env.VITE_YTDLP_API_BASE, "");
 export const ytdlpApi = (path: string) => YTDLP_BASE + path;
 
 /**
- * The CPU server that runs MuScriptor Small, the other transcriber in the picker.
+ * Kyutai's public MuScriptor instance, the other transcriber in the picker.
  *
- * The default is a path on this origin, not the box's own hostname: the box
- * answers a browser only from origins in its `MUSCRIPTOR_ALLOWED_ORIGINS`, and
- * a Vercel preview URL is never one of them. `/gpu/*` is rewritten to the box
- * by `vercel.json` in production and proxied by the dev server locally, which
- * makes every call same-origin to the browser and server-to-server to the box,
- * where CORS does not apply.
+ * The default is a path on this origin, not the instance's own hostname: it
+ * sends no CORS headers, so a browser cannot call it from any other origin.
+ * `/gpu/*` is rewritten to muscriptor.kyutai.org by `vercel.json` in
+ * production and proxied by the dev server locally, which makes every call
+ * same-origin to the browser and server-to-server to Kyutai, where CORS does
+ * not apply.
  *
- * Point this at `https://jerryzhou.ca/muscriptor` to talk to the box
- * directly — which works only from an origin it lists. Blank means the default
+ * Blank means the default
  * rather than same-origin-with-no-prefix, which the chord base above uses it
  * for: there the prefix *is* the path the proxy matches, so an empty base
  * would only produce a URL nothing serves.
